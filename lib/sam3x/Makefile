@@ -17,23 +17,20 @@
 ## along with this library.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-LIBNAME		= libopencm3_lm4f
+LIBNAME		= libopencm3_sam3x
 
 PREFIX		?= arm-none-eabi
 #PREFIX		?= arm-elf
 CC		= $(PREFIX)-gcc
 AR		= $(PREFIX)-ar
-CFLAGS		= -Os -g \
-		  -Wall -Wextra -Wimplicit-function-declaration \
-		  -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes \
-		  -Wundef -Wshadow \
-		  -I../../include -fno-common \
-		  -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -Wstrict-prototypes \
-		  -ffunction-sections -fdata-sections -MD -DLM4F
+CFLAGS		= -Os -g -Wall -Wextra -I../../include -fno-common \
+		  -mcpu=cortex-m3 -mthumb -Wstrict-prototypes \
+		  -ffunction-sections -fdata-sections -MD -DSAM3X
 # ARFLAGS	= rcsv
 ARFLAGS		= rcs
-OBJS		= gpio.o vector.o assert.o systemcontrol.o rcc.o uart.o
+OBJS		= gpio.o pmc.o usart.o
 
-VPATH += ../cm3
+VPATH += ../usb:../cm3
 
 include ../Makefile.include
+
