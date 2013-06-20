@@ -1,7 +1,18 @@
+/** @defgroup hash_defines HASH Defines
+
+@ingroup STM32F2xx_defines
+
+@brief Defined Constants and Types for the STM32F2xx HASH Controller
+
+@version 1.0.0
+
+@date 31 May 2013
+
+LGPL License Terms @ref lgpl_license
+ */
+
 /*
  * This file is part of the libopencm3 project.
- *
- * Copyright (C) 2012 Gareth McMullin <gareth@blacksphere.co.nz>
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +28,10 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libopencm3/sam3x/pio.h>
+#ifndef LIBOPENCM3_HASH_H
+#define LIBOPENCM3_HASH_H
 
-void pio_toggle(u32 gpioport, u32 gpios)
-{
-	u32 odsr = PIO_ODSR(gpioport);
-	PIO_CODR(gpioport) = odsr & gpios;
-	PIO_SODR(gpioport) = ~odsr & gpios;
-}
+#include <libopencm3/stm32/memorymap.h>
+#include <libopencm3/stm32/common/hash_common_f24.h>
 
+#endif

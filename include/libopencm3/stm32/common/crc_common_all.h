@@ -23,11 +23,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA CRC.H 
+/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA CRC.H
 The order of header inclusion is important. crc.h includes the device
 specific memorymap.h header before including this header file.*/
 
+/** @cond */
 #ifdef LIBOPENCM3_CRC_H
+/** @endcond */
 #ifndef LIBOPENCM3_CRC_COMMON_ALL_H
 #define LIBOPENCM3_CRC_COMMON_ALL_H
 
@@ -75,11 +77,11 @@ BEGIN_DECLS
 void crc_reset(void);
 
 /**
- * Add a word to the crc calculator and return the result.
- * @param data new word to add to the crc calculator
- * @return final crc calculator value
+ * Add a word to the CRC calculator and return the result.
+ * @param data new word to add to the CRC calculator
+ * @return final CRC calculator value
  */
-u32 crc_calculate(u32 data);
+uint32_t crc_calculate(uint32_t data);
 
 /**
  * Add a block of data to the CRC calculator and return the final result
@@ -87,14 +89,16 @@ u32 crc_calculate(u32 data);
  * @param size length of data, in 32bit increments
  * @return final CRC calculator value
  */
-u32 crc_calculate_block(u32 *datap, int size);
+uint32_t crc_calculate_block(uint32_t *datap, int size);
 
 END_DECLS
 
 /**@}*/
 
 #endif
+/** @cond */
 #else
 #warning "crc_common_all.h should not be included explicitly, only via crc.h"
 #endif
+/** @endcond */
 

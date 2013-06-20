@@ -6,7 +6,8 @@
  *
  * @version 1.0.0
  *
- * @author @htmlonly &copy; @endhtmlonly 2013 Alexandru Gagniuc <mr.nuke.me@gmail.com>
+ * @author @htmlonly &copy; @endhtmlonly 2013
+ * Alexandru Gagniuc <mr.nuke.me@gmail.com>
  *
  * @date 07 May 2013
  *
@@ -400,42 +401,132 @@ enum uart_interrupt_flag {
 	UART_INT_RI	= UART_IM_RIIM,
 };
 
+/**
+ * \brief UART RX FIFO interrupt trigger levels
+ *
+ * The levels indicate how full the FIFO should be before an interrupt is
+ * generated.  UART_FIFO_RX_TRIG_3_4 means that an interrupt is triggered when
+ * the FIFO is 3/4 full. As the FIFO is 8 elements deep, 1/8 is equal to being
+ * triggered by a single character.
+ */
+enum uart_fifo_rx_trigger_level {
+	UART_FIFO_RX_TRIG_1_8	= UART_IFLS_RXIFLSEL_1_8,
+	UART_FIFO_RX_TRIG_1_4	= UART_IFLS_RXIFLSEL_1_4,
+	UART_FIFO_RX_TRIG_1_2	= UART_IFLS_RXIFLSEL_1_2,
+	UART_FIFO_RX_TRIG_3_4	= UART_IFLS_RXIFLSEL_3_4,
+	UART_FIFO_RX_TRIG_7_8	= UART_IFLS_RXIFLSEL_7_8
+};
+
+/**
+ * \brief UART TX FIFO interrupt trigger levels
+ *
+ * The levels indicate how empty the FIFO should be before an interrupt is
+ * generated.  Note that this indicates the emptiness of the FIFO and not the
+ * fullness. This is somewhat confusing, but it follows the wording of the
+ * LM4F120H5QR datasheet.
+ *
+ * UART_FIFO_TX_TRIG_3_4 means that an interrupt is triggered when the FIFO is
+ * 3/4 empty. As the FIFO is 8 elements deep, 7/8 is equal to being triggered
+ * by a single character.
+ */
+enum uart_fifo_tx_trigger_level {
+	UART_FIFO_TX_TRIG_7_8	= UART_IFLS_TXIFLSEL_7_8,
+	UART_FIFO_TX_TRIG_3_4	= UART_IFLS_TXIFLSEL_3_4,
+	UART_FIFO_TX_TRIG_1_2	= UART_IFLS_TXIFLSEL_1_2,
+	UART_FIFO_TX_TRIG_1_4	= UART_IFLS_TXIFLSEL_1_4,
+	UART_FIFO_TX_TRIG_1_8	= UART_IFLS_TXIFLSEL_1_8
+};
 
 /* =============================================================================
  * Function prototypes
  * ---------------------------------------------------------------------------*/
 BEGIN_DECLS
 
-void uart_set_baudrate(u32 uart, u32 baud);
-void uart_set_databits(u32 uart, u8 databits);
-void uart_set_stopbits(u32 uart, u8 stopbits);
-void uart_set_parity(u32 uart, enum uart_parity parity);
-void uart_set_mode(u32 uart, u32 mode);
-void uart_set_flow_control(u32 uart, enum uart_flowctl flow);
-void uart_enable(u32 uart);
-void uart_disable(u32 uart);
-void uart_clock_from_piosc(u32 uart);
-void uart_clock_from_sysclk(u32 uart);
+void uart_set_baudrate(uint32_t uart, uint32_t baud);
+void uart_set_databits(uint32_t uart, uint8_t databits);
+void uart_set_stopbits(uint32_t uart, uint8_t stopbits);
+void uart_set_parity(uint32_t uart, enum uart_parity parity);
+void uart_set_mode(uint32_t uart, uint32_t mode);
+void uart_set_flow_control(uint32_t uart, enum uart_flowctl flow);
+void uart_enable(uint32_t uart);
+void uart_disable(uint32_t uart);
+void uart_clock_from_piosc(uint32_t uart);
+void uart_clock_from_sysclk(uint32_t uart);
 
-void uart_send(u32 uart, u16 data);
-u16 uart_recv(u32 uart);
-void uart_wait_send_ready(u32 uart);
-void uart_wait_recv_ready(u32 uart);
-void uart_send_blocking(u32 uart, u16 data);
-u16 uart_recv_blocking(u32 uart);
+void uart_send(uint32_t uart, uint16_t data);
+uint16_t uart_recv(uint32_t uart);
+void uart_wait_send_ready(uint32_t uart);
+void uart_wait_recv_ready(uint32_t uart);
+void uart_send_blocking(uint32_t uart, uint16_t data);
+uint16_t uart_recv_blocking(uint32_t uart);
 
-void uart_enable_rx_dma(u32 uart);
-void uart_disable_rx_dma(u32 uart);
-void uart_enable_tx_dma(u32 uart);
-void uart_disable_tx_dma(u32 uart);
+void uart_enable_rx_dma(uint32_t uart);
+void uart_disable_rx_dma(uint32_t uart);
+void uart_enable_tx_dma(uint32_t uart);
+void uart_disable_tx_dma(uint32_t uart);
 
-void uart_enable_interrupts(u32 uart, enum uart_interrupt_flag ints);
-void uart_disable_interrupts(u32 uart, enum uart_interrupt_flag ints);
-void uart_enable_rx_interrupt(u32 uart);
-void uart_disable_rx_interrupt(u32 uart);
-void uart_enable_tx_interrupt(u32 uart);
-void uart_disable_tx_interrupt(u32 uart);
-void uart_clear_interrupt_flag(u32 uart, enum uart_interrupt_flag ints);
+void uart_enable_fifo(uint32_t uart);
+void uart_disable_fifo(uint32_t uart);
+void uart_set_fifo_trigger_levels(uint32_t uart,
+				  enum uart_fifo_rx_trigger_level rx_level,
+				  enum uart_fifo_tx_trigger_level tx_level);
+
+/* We inline FIFO full/empty checks as they are intended to be called from ISRs
+ * */
+/** @ingroup uart_fifo
+ * @{
+ * \brief Determine if the TX fifo is full
+ *
+ * @param[in] uart UART block register address base @ref uart_reg_base
+ */
+static inline
+bool uart_is_tx_fifo_full(uint32_t uart)
+{
+	return UART_FR(uart) & UART_FR_TXFF;
+}
+
+
+/**
+ * \brief Determine if the TX fifo is empty
+ *
+ * @param[in] uart UART block register address base @ref uart_reg_base
+ */
+static inline
+bool uart_is_tx_fifo_empty(uint32_t uart)
+{
+	return UART_FR(uart) & UART_FR_TXFE;
+}
+
+/**
+ * \brief Determine if the RX fifo is full
+ *
+ * @param[in] uart UART block register address base @ref uart_reg_base
+ */
+static inline
+bool uart_is_rx_fifo_full(uint32_t uart)
+{
+	return UART_FR(uart) & UART_FR_RXFF;
+}
+
+/**
+ * \brief Determine if the RX fifo is empty
+ *
+ * @param[in] uart UART block register address base @ref uart_reg_base
+ */
+static inline
+bool uart_is_rx_fifo_empty(uint32_t uart)
+{
+	return UART_FR(uart) & UART_FR_RXFE;
+}
+/**@}*/
+
+void uart_enable_interrupts(uint32_t uart, enum uart_interrupt_flag ints);
+void uart_disable_interrupts(uint32_t uart, enum uart_interrupt_flag ints);
+void uart_enable_rx_interrupt(uint32_t uart);
+void uart_disable_rx_interrupt(uint32_t uart);
+void uart_enable_tx_interrupt(uint32_t uart);
+void uart_disable_tx_interrupt(uint32_t uart);
+void uart_clear_interrupt_flag(uint32_t uart, enum uart_interrupt_flag ints);
 
 /* Let's keep this one inlined. It's designed to be used in ISRs */
 /** @ingroup uart_irq
@@ -446,7 +537,7 @@ void uart_clear_interrupt_flag(u32 uart, enum uart_interrupt_flag ints);
  * @param[in] source source to check.
  */
 static inline
-bool uart_is_interrupt_source(u32 uart, enum uart_interrupt_flag source)
+bool uart_is_interrupt_source(uint32_t uart, enum uart_interrupt_flag source)
 {
 	return UART_MIS(uart) & source;
 }

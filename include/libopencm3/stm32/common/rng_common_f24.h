@@ -16,11 +16,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA RNG.H 
+/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA RNG.H
 The order of header inclusion is important. rng.h includes the device
 specific memorymap.h header before including this header file.*/
 
+/** @cond */
 #ifdef LIBOPENCM3_RNG_H
+/** @endcond */
 #ifndef LIBOPENCM3_RNG_COMMON_F24_H
 #define LIBOPENCM3_RNG_COMMON_F24_H
 
@@ -30,7 +32,7 @@ specific memorymap.h header before including this header file.*/
 /* --- Random number generator registers ----------------------------------- */
 
 /* Control register */
-#define RNG_CR			MMIO32(RNG_BASE + 0x00) 
+#define RNG_CR			MMIO32(RNG_BASE + 0x00)
 
 /* Status register */
 #define RNG_SR			MMIO32(RNG_BASE + 0x04)
@@ -43,7 +45,7 @@ specific memorymap.h header before including this header file.*/
 /* RNG ENABLE */
 #define RNG_CR_RNGEN		(1 << 2)
 
-/* RNG interupt enable */
+/* RNG interrupt enable */
 #define RNG_CR_IE			(1 << 3)
 
 /* --- RNG_SR values ------------------------------------------------------- */
@@ -57,14 +59,16 @@ specific memorymap.h header before including this header file.*/
 /* Seed error current status */
 #define RNG_SR_SECS		(1 << 2)
 
-/* Clock error interup status */
+/* Clock error interrupt status */
 #define RNG_SR_CEIS		(1 << 5)
 
-/* Seed error interup status */
+/* Seed error interrupt status */
 #define RNG_SR_SEIS		(1 << 6)
 
 #endif
+/** @cond */
 #else
 #warning "rng_common_f24.h should not be included explicitly, only via rng.h"
 #endif
+/** @endcond */
 

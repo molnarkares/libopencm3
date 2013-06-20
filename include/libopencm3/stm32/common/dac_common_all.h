@@ -1,6 +1,7 @@
 /** @addtogroup dac_defines
 
-@author @htmlonly &copy; @endhtmlonly 2012 Felix Held <felix-libopencm3@felixheld.de>
+@author @htmlonly &copy; @endhtmlonly 2012
+Felix Held <felix-libopencm3@felixheld.de>
 
 */
 
@@ -25,11 +26,13 @@
 
 /**@{*/
 
-/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA DAC.H 
+/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA DAC.H
 The order of header inclusion is important. dac.h includes the device
 specific memorymap.h header before including this header file.*/
 
+/** @cond */
 #ifdef LIBOPENCM3_DAC_H
+/** @endcond */
 #ifndef LIBOPENCM3_DAC_COMMON_ALL_H
 #define LIBOPENCM3_DAC_COMMON_ALL_H
 
@@ -92,8 +95,9 @@ specific memorymap.h header before including this header file.*/
  * Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**n)-1
  */
 #define DAC_CR_MAMP2_SHIFT		24
-/** @defgroup dac_mamp2 DAC Channel 2 LFSR Mask and Triangle Wave Amplitude values
-@ingroup STM32F_dac_defines
+/** @defgroup dac_mamp2 DAC Channel 2 LFSR Mask and Triangle Wave Amplitude
+values
+@ingroup dac_defines
 
 Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n)-1
 @{*/
@@ -122,7 +126,7 @@ Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n)-1
 #define DAC_CR_WAVE2_SHIFT		22
 #define DAC_CR_WAVE2_DIS		(0x3 << DAC_CR_WAVE2_SHIFT)
 /** @defgroup dac_wave2_en DAC Channel 2 Waveform Generation Enable
-@ingroup STM32F_dac_defines
+@ingroup dac_defines
 
 @li NOISE: Noise wave generation enabled
 @li TRI: Triangle wave generation enabled
@@ -153,7 +157,7 @@ Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n)-1
  */
 #define DAC_CR_TSEL2_SHIFT		19
 /** @defgroup dac_trig2_sel DAC Channel 2 Trigger Source Selection
-@ingroup STM32F_dac_defines
+@ingroup dac_defines
 
 @li T6: Timer 6 TRGO event
 @li T3: Timer 3 TRGO event
@@ -204,8 +208,9 @@ Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n)-1
  * Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**n)-1
  */
 #define DAC_CR_MAMP1_SHIFT		8
-/** @defgroup dac_mamp1 DAC Channel 1 LFSR Mask and Triangle Wave Amplitude values
-@ingroup STM32F_dac_defines
+/** @defgroup dac_mamp1 DAC Channel 1 LFSR Mask and Triangle Wave Amplitude
+values
+@ingroup dac_defines
 
 Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n+1)-1
 @{*/
@@ -234,7 +239,7 @@ Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n+1)-1
 #define DAC_CR_WAVE1_SHIFT		6
 #define DAC_CR_WAVE1_DIS		(0x3 << DAC_CR_WAVE1_SHIFT)
 /** @defgroup dac_wave1_en DAC Channel 1 Waveform Generation Enable
-@ingroup STM32F_dac_defines
+@ingroup dac_defines
 
 @li DIS: wave generation disabled
 @li NOISE: Noise wave generation enabled
@@ -266,7 +271,7 @@ Unmask bits [(n-1)..0] of LFSR/Triangle Amplitude equal to (2**(n+1)-1
  */
 #define DAC_CR_TSEL1_SHIFT		3
 /** @defgroup dac_trig1_sel DAC Channel 1 Trigger Source Selection
-@ingroup STM32F_dac_defines
+@ingroup dac_defines
 
 @li T6: Timer 6 TRGO event
 @li T3: Timer 3 TRGO event
@@ -397,20 +402,24 @@ void dac_dma_enable(data_channel dac_channel);
 void dac_dma_disable(data_channel dac_channel);
 void dac_trigger_enable(data_channel dac_channel);
 void dac_trigger_disable(data_channel dac_channel);
-void dac_set_trigger_source(u32 dac_trig_src);
-void dac_set_waveform_generation(u32 dac_wave_ens);
+void dac_set_trigger_source(uint32_t dac_trig_src);
+void dac_set_waveform_generation(uint32_t dac_wave_ens);
 void dac_disable_waveform_generation(data_channel dac_channel);
-void dac_set_waveform_characteristics(u32 dac_mamp);
-void dac_load_data_buffer_single(u16 dac_data, data_align dac_data_format, data_channel dac_channel);
-void dac_load_data_buffer_dual(u16 dac_data1, u16 dac_data2, data_align dac_data_format);
+void dac_set_waveform_characteristics(uint32_t dac_mamp);
+void dac_load_data_buffer_single(uint16_t dac_data, data_align dac_data_format,
+				 data_channel dac_channel);
+void dac_load_data_buffer_dual(uint16_t dac_data1, uint16_t dac_data2,
+			       data_align dac_data_format);
 void dac_software_trigger(data_channel dac_channel);
 
 END_DECLS
 
 #endif
+/** @cond */
 #else
 #warning "dac_common_all.h should not be included explicitly, only via dac.h"
 #endif
+/** @endcond */
 
 /**@}*/
 

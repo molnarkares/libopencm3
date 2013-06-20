@@ -20,7 +20,7 @@
 #ifndef SAM3X_GPIO_H
 #define SAM3X_GPIO_H
 
-#include <libopencm3/sam3x/pio.h>
+#include <libopencm3/sam/pio.h>
 
 /* flags may be or'd together, but only contain one of
  * GPOUTPUT, PERIPHA and PERIPHB */
@@ -33,19 +33,19 @@ enum gpio_flags {
 	GPIO_FLAG_PULL_UP = 8,
 };
 
-void gpio_init(u32 gpioport, u32 pins, enum gpio_flags flags);
+void gpio_init(uint32_t gpioport, uint32_t pins, enum gpio_flags flags);
 
-static inline void gpio_set(u32 gpioport, u32 gpios)
+static inline void gpio_set(uint32_t gpioport, uint32_t gpios)
 {
 	PIO_SODR(gpioport) = gpios;
 }
 
-static inline void gpio_clear(u32 gpioport, u32 gpios)
+static inline void gpio_clear(uint32_t gpioport, uint32_t gpios)
 {
 	PIO_CODR(gpioport) = gpios;
 }
 
-void gpio_toggle(u32 gpioport, u32 gpios);
+void gpio_toggle(uint32_t gpioport, uint32_t gpios);
 
 #endif
 

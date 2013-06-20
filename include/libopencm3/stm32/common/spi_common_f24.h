@@ -22,11 +22,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA SPI.H 
+/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA SPI.H
 The order of header inclusion is important. spi.h includes the device
 specific memorymap.h header before including this header file.*/
 
+/** @cond */
 #ifdef LIBOPENCM3_SPI_H
+/** @endcond */
 #ifndef LIBOPENCM3_SPI_COMMON_F24_H
 #define LIBOPENCM3_SPI_COMMON_F24_H
 
@@ -53,8 +55,10 @@ specific memorymap.h header before including this header file.*/
 #define SPI_SR_TIFRFE			(1 << 8)
 
 #endif
+/** @cond */
 #else
 #warning "spi_common_f24.h should not be included explicitly, only via spi.h"
 #endif
+/** @endcond */
 /**@}*/
 
