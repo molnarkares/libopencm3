@@ -22,20 +22,24 @@
 
 #include "common.h"
 
-/* Implements synchronisation primatives as discussed in the ARM document
+void __dmb(void);
+
+/* Implements synchronisation primitives as discussed in the ARM document
  * DHT0008A (ID081709) "ARM Synchronization Primitives" and the ARM v7-M
  * Architecture Reference Manual.
 */
 
 /* --- Exclusive load and store instructions ------------------------------- */
 
+/* Those are defined only on CM3 or CM4 */
+#if defined(__ARM_ARCH_7M__) || defined (__ARM_ARCH_7EM__)
+
 uint32_t __ldrex(volatile uint32_t *addr);
 uint32_t __strex(uint32_t val, volatile uint32_t *addr);
-void __dmb(void);
 
 /* --- Convenience functions ----------------------------------------------- */
 
-/* Here we implement some simple synchronisation primatives. */
+/* Here we implement some simple synchronisation primitives. */
 
 typedef uint32_t mutex_t;
 
@@ -44,5 +48,7 @@ typedef uint32_t mutex_t;
 
 void mutex_lock(mutex_t *m);
 void mutex_unlock(mutex_t *m);
+
+#endif
 
 #endif

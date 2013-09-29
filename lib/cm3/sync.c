@@ -19,6 +19,17 @@
 
 #include <libopencm3/cm3/sync.h>
 
+/* DMB is supported on CM0 */
+void __dmb()
+{
+	__asm__ volatile ("dmb");
+}
+
+/* Those are defined only on CM3 or CM4 */
+#if defined(__ARM_ARCH_6M__)
+#warning "sync not supported on ARMv6-M arch"
+#else
+
 uint32_t __ldrex(volatile uint32_t *addr)
 {
 	uint32_t res;
@@ -32,11 +43,6 @@ uint32_t __strex(uint32_t val, volatile uint32_t *addr)
 	__asm__ volatile ("strex %0, %2, [%1]"
 			  : "=&r" (res) : "r" (addr), "r" (val));
 	return res;
-}
-
-void __dmb()
-{
-	__asm__ volatile ("dmb");
 }
 
 void mutex_lock(mutex_t *m)
@@ -59,9 +65,11 @@ void mutex_lock(mutex_t *m)
 
 void mutex_unlock(mutex_t *m)
 {
+	/* Ensure accesses to protected resource are finished */
 	__dmb();
 
 	/* Free the lock. */
 	*m = MUTEX_UNLOCKED;
 }
 
+#endif

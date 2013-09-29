@@ -738,7 +738,7 @@ injected channels.
 #define ADC_CCR_MULTI_INDEPENDENT	(0x00 << 0)
 
 /* Dual modes (ADC1 + ADC2) */
-/** 
+/**
  * Dual modes (ADC1 + ADC2) Combined regular simultaneous +
  * injected simultaneous mode.
  */
@@ -842,7 +842,7 @@ void adc_enable_external_trigger_regular(uint32_t adc, uint32_t trigger,
 					 uint32_t polarity);
 void adc_enable_external_trigger_injected(uint32_t adc, uint32_t trigger,
 					  uint32_t polarity);
-void adc_set_resolution(uint32_t adc, uint16_t resolution);
+void adc_set_resolution(uint32_t adc, uint32_t resolution);
 void adc_enable_overrun_interrupt(uint32_t adc);
 void adc_disable_overrun_interrupt(uint32_t adc);
 bool adc_get_overrun_flag(uint32_t adc);
