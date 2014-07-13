@@ -32,9 +32,7 @@
 
 #ifndef LIBOPENCM3_COMP_H
 #define LIBOPENCM3_COMP_H
-
-#include <libopencm3/cm3/common.h>
-#include <libopencm3/stm32/memorymap.h>
+/**@{*/
 
 /*****************************************************************************/
 /* Module definitions                                                        */
@@ -121,5 +119,6 @@ void comp_select_hyst(uint8_t id, uint32_t hyst);
 void comp_select_speed(uint8_t id, uint32_t speed);
 
 END_DECLS
+/**@}*/
 
 #endif

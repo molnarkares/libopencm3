@@ -84,7 +84,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libopencm3/stm32/f3/adc.h>
+#include <libopencm3/stm32/adc.h>
 
 /**@{*/
 
@@ -702,7 +702,7 @@ void adc_set_injected_sequence(uint32_t adc, uint8_t length, uint8_t channel[])
 		return;
 	}
 
-	for (i = 1; i <= length; i++) {
+	for (i = 0; i < length; i++) {
 		reg32 |= ADC_JSQR_JSQ_VAL(4 - i, channel[length - i - 1]);
 	}
 

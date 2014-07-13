@@ -46,6 +46,10 @@
  * The counter is set to the reload value when the counter starts and after it
  * reaches zero.
  *
+ * @note The systick counter value might be undefined upon startup. To get
+ * predictable behavior, it is a good idea to set or clear the counter after
+ * set reload. @seealso systick_clear
+ *
  * @param[in] value uint32_t. 24 bit reload value.
  */
 
@@ -63,6 +67,37 @@ void systick_set_reload(uint32_t value)
 uint32_t systick_get_reload(void)
 {
 	return STK_RVR & STK_RVR_RELOAD;
+}
+
+/** @brief SysTick Set clock and frequency of overflow
+ *
+ * This function sets the systick to AHB clock source, and the prescaler to
+ * generate interrupts with the desired frequency. The function fails, if
+ * the frequency is too low.
+ *
+ * @param[in] freq uint32_t The desired frequency in Hz
+ * @param[in] ahb uint32_t The current AHB frequency in Hz
+ * @returns true, if success, false if the desired frequency cannot be set.
+ */
+bool systick_set_frequency(uint32_t freq, uint32_t ahb)
+{
+	uint32_t ratio = ahb / freq;
+
+#if defined(__ARM_ARCH_6M__)
+	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+#else
+	if (ratio >= (STK_RVR_RELOAD * 8)) {
+		/* This frequency is too slow */
+		return false;
+	} else if (ratio >= STK_RVR_RELOAD) {
+		ratio /= 8;
+		systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
+	} else {
+		systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+	}
+#endif
+	systick_set_reload(ratio - 1);
+	return true;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -142,6 +177,17 @@ void systick_counter_disable(void)
 uint8_t systick_get_countflag(void)
 {
 	return (STK_CSR & STK_CSR_COUNTFLAG) ? 1 : 0;
+}
+
+/*---------------------------------------------------------------------------*/
+/** @brief SysTick Clear counter Value.
+ *
+ * The counter value is cleared. Useful for well defined startup.
+ */
+
+void systick_clear(void)
+{
+	STK_CVR = 0;
 }
 
 /*---------------------------------------------------------------------------*/

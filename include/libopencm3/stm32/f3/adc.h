@@ -1,6 +1,6 @@
 /** @defgroup adc_defines ADC Defines
  *
- * @brief <b>Defined Constants and Types for the STM32F3xx Analog to Digital
+ * @brief <b>Defined Constants and Types for the STM32F37x Analog to Digital
  * converter</b>
  *
  * @ingroup STM32F3xx_defines
@@ -33,9 +33,6 @@
 
 #ifndef LIBOPENCM3_ADC_H
 #define LIBOPENCM3_ADC_H
-
-#include <libopencm3/stm32/memorymap.h>
-#include <libopencm3/cm3/common.h>
 
 #define ADC1		ADC1_BASE
 #define ADC2		ADC2_BASE
@@ -628,7 +625,7 @@
 #define ADC_JSQR_JSQ2_LSB		14
 #define ADC_JSQR_JSQ1_LSB		8
 
-#define ADC_JSQR_JSQ_VAL(n,val)		((val) << (((n) - 1) * 6 + 8))
+#define ADC_JSQR_JSQ_VAL(n, val)	((val) << (((n) - 1) * 6 + 8))
 #define ADC_JSQR_JL_VAL(val)		(((val) - 1) << ADC_JSQR_JL_SHIFT)
 
 /* Bits 30:26 JSQ4[4:0]: 4th conversion in the injected sequence */

@@ -17,6 +17,9 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libopencm3/cm3/common.h>
+#include <libopencm3/stm32/memorymap.h>
+
 #if defined(STM32F0)
 #       include <libopencm3/stm32/f0/adc.h>
 #elif defined(STM32F1)
@@ -25,6 +28,8 @@
 #       include <libopencm3/stm32/f3/adc.h>
 #elif defined(STM32F4)
 #       include <libopencm3/stm32/f4/adc.h>
+#elif defined(STM32L1)
+#       include <libopencm3/stm32/l1/adc.h>
 #else
 #       error "stm32 family not defined."
 #endif

@@ -30,8 +30,8 @@
 
 #ifndef LIBOPENCM3_FLASH_H
 #define LIBOPENCM3_FLASH_H
+/**@{*/
 
-#include <libopencm3/stm32/memorymap.h>
 #include <libopencm3/stm32/common/flash_common_f234.h>
 
 /* --- FLASH registers ----------------------------------------------------- */
@@ -67,6 +67,7 @@
 #define FLASH_CR_MER			(1 << 2)
 #define FLASH_CR_PER			(1 << 1)
 #define FLASH_CR_PG			(1 << 0)
+/**@}*/
 
 #endif
 

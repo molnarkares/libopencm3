@@ -55,6 +55,9 @@ uint32_t rcc_ppre_frequency = 8000000; /* 8MHz after reset */
 void rcc_osc_ready_int_clear(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		RCC_CIR |= RCC_CIR_HSI48RDYC;
+		break;
 	case HSI14:
 		RCC_CIR |= RCC_CIR_HSI14RDYC;
 		break;
@@ -85,6 +88,9 @@ void rcc_osc_ready_int_clear(enum rcc_osc osc)
 void rcc_osc_ready_int_enable(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		RCC_CIR |= RCC_CIR_HSI48RDYIE;
+		break;
 	case HSI14:
 		RCC_CIR |= RCC_CIR_HSI14RDYIE;
 		break;
@@ -115,6 +121,9 @@ void rcc_osc_ready_int_enable(enum rcc_osc osc)
 void rcc_osc_ready_int_disable(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		RCC_CIR &= ~RCC_CIR_HSI48RDYC;
+		break;
 	case HSI14:
 		RCC_CIR &= ~RCC_CIR_HSI14RDYC;
 		break;
@@ -146,6 +155,9 @@ void rcc_osc_ready_int_disable(enum rcc_osc osc)
 int rcc_osc_ready_int_flag(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		return (RCC_CIR & RCC_CIR_HSI48RDYF) != 0;
+		break;
 	case HSI14:
 		return (RCC_CIR & RCC_CIR_HSI14RDYF) != 0;
 		break;
@@ -198,6 +210,9 @@ int rcc_css_int_flag(void)
 void rcc_wait_for_osc_ready(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		while ((RCC_CIR & RCC_CIR_HSI48RDYF) != 0);
+		break;
 	case HSI14:
 		while ((RCC_CIR & RCC_CIR_HSI14RDYF) != 0);
 		break;
@@ -234,6 +249,9 @@ void rcc_wait_for_osc_ready(enum rcc_osc osc)
 void rcc_osc_on(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		RCC_CR2 |= RCC_CR2_HSI48ON;
+		break;
 	case HSI14:
 		RCC_CR2 |= RCC_CR2_HSI14ON;
 		break;
@@ -250,7 +268,7 @@ void rcc_osc_on(enum rcc_osc osc)
 		RCC_CSR |= RCC_CSR_LSION;
 		break;
 	case PLL:
-		/* don't do anything */
+		RCC_CR |= RCC_CR_PLLON;
 		break;
 	}
 }
@@ -269,6 +287,9 @@ void rcc_osc_on(enum rcc_osc osc)
 void rcc_osc_off(enum rcc_osc osc)
 {
 	switch (osc) {
+	case HSI48:
+		RCC_CR2 &= ~RCC_CR2_HSI48ON;
+		break;
 	case HSI14:
 		RCC_CR2 &= ~RCC_CR2_HSI14ON;
 		break;
@@ -328,6 +349,7 @@ void rcc_osc_bypass_enable(enum rcc_osc osc)
 	case LSE:
 		RCC_BDCR |= RCC_BDCR_LSEBYP;
 		break;
+	case HSI48:
 	case HSI14:
 	case HSI:
 	case LSI:
@@ -357,6 +379,7 @@ void rcc_osc_bypass_disable(enum rcc_osc osc)
 	case LSE:
 		RCC_BDCR &= ~RCC_BDCR_LSEBYP;
 		break;
+	case HSI48:
 	case HSI14:
 	case PLL:
 	case HSI:
@@ -384,6 +407,9 @@ void rcc_set_sysclk_source(enum rcc_osc clk)
 		break;
 	case PLL:
 		RCC_CFGR = (RCC_CFGR & ~RCC_CFGR_SW) | RCC_CFGR_SW_PLL;
+		break;
+	case HSI48:
+		RCC_CFGR = (RCC_CFGR & ~RCC_CFGR_SW) | RCC_CFGR_SW_HSI48;
 		break;
 	case LSI:
 	case LSE:
@@ -459,6 +485,8 @@ enum rcc_osc rcc_system_clock_source(void)
 		return HSE;
 	case RCC_CFGR_SWS_PLL:
 		return PLL;
+	case RCC_CFGR_SWS_HSI48:
+		return HSI48;
 	}
 
 	cm3_assert_not_reached();
@@ -493,7 +521,7 @@ void rcc_clock_setup_in_hsi_out_16mhz(void)
 	/* 8MHz * 4 / 2 = 16MHz	 */
 	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL4);
 
-	RCC_CFGR &= RCC_CFGR_PLLSRC;
+	RCC_CFGR &= ~RCC_CFGR_PLLSRC;
 
 	rcc_osc_on(PLL);
 	rcc_wait_for_osc_ready(PLL);
@@ -518,7 +546,7 @@ void rcc_clock_setup_in_hsi_out_24mhz(void)
 	/* 8MHz * 6 / 2 = 24MHz	 */
 	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL6);
 
-	RCC_CFGR &= RCC_CFGR_PLLSRC;
+	RCC_CFGR &= ~RCC_CFGR_PLLSRC;
 
 	rcc_osc_on(PLL);
 	rcc_wait_for_osc_ready(PLL);
@@ -539,10 +567,10 @@ void rcc_clock_setup_in_hsi_out_32mhz(void)
 
 	flash_set_ws(FLASH_ACR_LATENCY_024_048MHZ);
 
-	/* 8MHz * 8 / 2 = 32MHz	 */
+	/* 8MHz * 8 / 2 = 32MHz	*/
 	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL8);
 
-	RCC_CFGR &= RCC_CFGR_PLLSRC;
+	RCC_CFGR &= ~RCC_CFGR_PLLSRC;
 
 	rcc_osc_on(PLL);
 	rcc_wait_for_osc_ready(PLL);
@@ -563,17 +591,17 @@ void rcc_clock_setup_in_hsi_out_40mhz(void)
 
 	flash_set_ws(FLASH_ACR_LATENCY_024_048MHZ);
 
-	/* 8MHz * 10 / 2 = 40MHz	 */
+	/* 8MHz * 10 / 2 = 40MHz */
 	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL10);
 
-	RCC_CFGR &= RCC_CFGR_PLLSRC;
+	RCC_CFGR &= ~RCC_CFGR_PLLSRC;
 
 	rcc_osc_on(PLL);
 	rcc_wait_for_osc_ready(PLL);
 	rcc_set_sysclk_source(PLL);
 
-	rcc_ppre_frequency = 32000000;
-	rcc_core_frequency = 32000000;
+	rcc_ppre_frequency = 40000000;
+	rcc_core_frequency = 40000000;
 }
 
 void rcc_clock_setup_in_hsi_out_48mhz(void)
@@ -587,10 +615,10 @@ void rcc_clock_setup_in_hsi_out_48mhz(void)
 
 	flash_set_ws(FLASH_ACR_LATENCY_024_048MHZ);
 
-	/* 8MHz * 12 / 2 = 24MHz	 */
-	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL16);
+	/* 8MHz * 12 / 2 = 48MHz */
+	rcc_set_pll_multiplication_factor(RCC_CFGR_PLLMUL_MUL12);
 
-	RCC_CFGR &= RCC_CFGR_PLLSRC;
+	RCC_CFGR &= ~RCC_CFGR_PLLSRC;
 
 	rcc_osc_on(PLL);
 	rcc_wait_for_osc_ready(PLL);

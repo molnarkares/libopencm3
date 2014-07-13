@@ -27,9 +27,9 @@
 /* --- STM32 specific peripheral definitions ------------------------------- */
 
 /* Memory map for all buses */
-#define FLASH_BASE			((uint32_t)0x08000000)
-#define PERIPH_BASE			((uint32_t)0x40000000)
-#define INFO_BASE			((uint32_t)0x1ffff000)
+#define FLASH_BASE			(0x08000000U)
+#define PERIPH_BASE			(0x40000000U)
+#define INFO_BASE			(0x1ffff000U)
 #define PERIPH_BASE_APB			(PERIPH_BASE + 0x00000000)
 #define PERIPH_BASE_AHB1		(PERIPH_BASE + 0x00020000)
 #define PERIPH_BASE_AHB2		(PERIPH_BASE + 0x08000000)
@@ -41,6 +41,7 @@
 #define TIM3_BASE			(PERIPH_BASE_APB + 0x0400)
 
 #define TIM6_BASE			(PERIPH_BASE_APB + 0x1000)
+#define TIM7_BASE			(PERIPH_BASE_APB + 0x1400)
 
 #define TIM14_BASE			(PERIPH_BASE_APB + 0x2000)
 /* PERIPH_BASE_APB1 + 0x2400 (0x4000 2400 - 0x4000 27FF): Reserved */
@@ -51,10 +52,16 @@
 #define SPI2_BASE			(PERIPH_BASE_APB + 0x3800)
 /* PERIPH_BASE_APB + 0x4000 (0x4000 4000 - 0x4000 3FFF): Reserved */
 #define USART2_BASE			(PERIPH_BASE_APB + 0x4400)
+#define USART3_BASE			(PERIPH_BASE_APB + 0x4800)
+#define USART4_BASE			(PERIPH_BASE_APB + 0x4C00)
 
 #define I2C1_BASE			(PERIPH_BASE_APB + 0x5400)
 #define I2C2_BASE			(PERIPH_BASE_APB + 0x5800)
+#define USB_DEV_FS_BASE			(PERIPH_BASE_APB + 0x5C00)
+/* USB_PMA_BASE already defined in usb.h */
+#define BX_CAN1_BASE			(PERIPH_BASE_APB + 0x6400)
 
+#define CRS_BASE			(PERIPH_BASE_APB + 0x6C00)
 #define POWER_CONTROL_BASE		(PERIPH_BASE_APB + 0x7000)
 #define DAC_BASE			(PERIPH_BASE_APB + 0x7400)
 #define CEC_BASE			(PERIPH_BASE_APB + 0x7800)
@@ -75,6 +82,8 @@
 
 /* AHB1 */
 #define DMA_BASE			(PERIPH_BASE_AHB1 + 0x0000)
+/* DMA is the name in the F0 refman, but all other stm32's use DMA1 */
+#define DMA1_BASE			DMA_BASE
 
 #define RCC_BASE			(PERIPH_BASE_AHB1 + 0x1000)
 
@@ -89,12 +98,12 @@
 #define GPIO_PORT_B_BASE		(PERIPH_BASE_AHB2 + 0x0400)
 #define GPIO_PORT_C_BASE		(PERIPH_BASE_AHB2 + 0x0800)
 #define GPIO_PORT_D_BASE		(PERIPH_BASE_AHB2 + 0x0C00)
-
+#define GPIO_PORT_E_BASE		(PERIPH_BASE_AHB2 + 0x1000)
 #define GPIO_PORT_F_BASE		(PERIPH_BASE_AHB2 + 0x1400)
 
 /* Device Electronic Signature */
-#define DESIG_FLASH_SIZE_BASE		(0x1FFFF7CC)
-#define DESIG_UNIQUE_ID_BASE		(0x1FFFF7AC)
+#define DESIG_FLASH_SIZE_BASE		(0x1FFFF7CCU)
+#define DESIG_UNIQUE_ID_BASE		(0x1FFFF7ACU)
 #define DESIG_UNIQUE_ID0		MMIO32(DESIG_UNIQUE_ID_BASE)
 #define DESIG_UNIQUE_ID1		MMIO32(DESIG_UNIQUE_ID_BASE + 4)
 #define DESIG_UNIQUE_ID2		MMIO32(DESIG_UNIQUE_ID_BASE + 8)

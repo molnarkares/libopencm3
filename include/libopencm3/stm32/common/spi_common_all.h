@@ -1,9 +1,8 @@
 /** @addtogroup spi_defines
-
-@author @htmlonly &copy; @endhtmlonly 2009 Uwe Hermann <uwe@hermann-uwe.de>
-
-*/
-
+ *
+ * @author @htmlonly &copy; @endhtmlonly 2009 Uwe Hermann <uwe@hermann-uwe.de>
+ *
+ */
 /*
  * This file is part of the libopencm3 project.
  *
@@ -28,12 +27,10 @@ The order of header inclusion is important. spi.h includes the device
 specific memorymap.h header before including this header file.*/
 
 /** @cond */
-#if defined(LIBOPENCM3_SPI_H) || defined(LIBOPENCM3_SPI_COMMON_F24_H)
+#if defined(LIBOPENCM3_SPI_H)
 /** @endcond */
 #ifndef LIBOPENCM3_SPI_COMMON_ALL_H
 #define LIBOPENCM3_SPI_COMMON_ALL_H
-
-#include <libopencm3/cm3/common.h>
 
 /**@{*/
 
@@ -49,6 +46,9 @@ specific memorymap.h header before including this header file.*/
 #define SPI1				SPI1_BASE
 #define SPI2				SPI2_I2S_BASE
 #define SPI3				SPI3_I2S_BASE
+#define SPI4				SPI4_BASE
+#define SPI5				SPI5_BASE
+#define SPI6				SPI6_BASE
 /**@}*/
 
 /* --- SPI registers ------------------------------------------------------- */

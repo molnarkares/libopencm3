@@ -4,6 +4,13 @@
  *
  * @ingroup STM32F3xx_defines
  *
+ * @author @htmlonly &copy; @endhtmlonly 2011
+ * Stephen Caudle <scaudle@doceme.com>
+ * @author @htmlonly &copy; @endhtmlonly 2013
+ * Fernando Cortes <fernando.corcam@gmail.com>
+ * @author @htmlonly &copy; @endhtmlonly 2013
+ * Guillermo Rivera <memogrg@gmail.com>
+ *
  * @version 1.0.0
  *
  * @date 11 July 2013
@@ -34,7 +41,7 @@
 #ifndef LIBOPENCM3_PWR_F3_H
 #define LIBOPENCM3_PWR_F3_H
 
-#include <libopencm3/stm32/pwr.h>
+#include <libopencm3/stm32/common/pwr_common_all.h>
 
 /* --- PWR_CR values ------------------------------------------------------- */
 
