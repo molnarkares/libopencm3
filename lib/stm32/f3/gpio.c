@@ -147,20 +147,10 @@ void gpio_port_write(uint32_t gpioport, uint16_t data)
 
 void gpio_port_config_lock(uint32_t gpioport, uint16_t gpios)
 {
-	uint32_t reg32;
+	volatile uint32_t reg32;
 
 	/* Special "Lock Key Writing Sequence", see datasheet. */
 	GPIO_LCKR(gpioport) = GPIO_LCKK | gpios;	/* Set LCKK. */
 	GPIO_LCKR(gpioport) = ~GPIO_LCKK & gpios;	/* Clear LCKK. */
 	GPIO_LCKR(gpioport) = GPIO_LCKK | gpios;	/* Set LCKK. */
-	reg32 = GPIO_LCKR(gpioport);			/* Read LCKK. */
-	reg32 = GPIO_LCKR(gpioport);			/* Read LCKK again. */
-
-	/*
-	 * Tell the compiler the variable is actually used.
-	 * It will get optimized out anyways.
-	 */
-	reg32 = reg32;
-
-	/* If (reg32 & GPIO_LCKK) is true, the lock is now active. */
 }
