@@ -28,7 +28,7 @@ void gpio_init(uint32_t port, uint32_t pins, enum gpio_flags flags)
 		 */
 		PIO_SODR(port) = pins;
 		flags |= GPIO_FLAG_OPEN_DRAIN;
-		/* fall through */
+		/* no break */
 	case GPIO_FLAG_GPOUTPUT:
 		PIO_OER(port) = pins;
 		PIO_PER(port) = pins;
@@ -40,6 +40,7 @@ void gpio_init(uint32_t port, uint32_t pins, enum gpio_flags flags)
 	case GPIO_FLAG_PERIPHB:
 		PIO_ABSR(port) |= pins;
 		PIO_PDR(port) = pins;
+		break;
 	}
 
 	if (flags & GPIO_FLAG_OPEN_DRAIN) {

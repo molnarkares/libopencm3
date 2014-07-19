@@ -194,6 +194,7 @@ int rcc_osc_ready_int_flag(enum rcc_osc osc)
 	}
 
 	cm3_assert_not_reached();
+	return (0);
 }
 
 /*---------------------------------------------------------------------------*/

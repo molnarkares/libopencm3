@@ -179,6 +179,7 @@ int rcc_osc_ready_int_flag(enum rcc_osc osc)
 	}
 
 	cm3_assert_not_reached();
+	return (0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -490,6 +491,7 @@ enum rcc_osc rcc_system_clock_source(void)
 	}
 
 	cm3_assert_not_reached();
+	return (0);
 }
 
 void rcc_clock_setup_in_hsi_out_8mhz(void)
