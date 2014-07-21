@@ -98,8 +98,8 @@ void iwdg_set_period_ms(uint32_t period)
 	}
 
 	/* Avoid the undefined situation of a zero count */
-	if (count == 0) {
-		count = 1;
+	if (reload == 0) {
+	    reload = 1;
 	}
 
 	while (iwdg_prescaler_busy());
