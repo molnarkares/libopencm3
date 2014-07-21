@@ -74,8 +74,8 @@ void iwdg_set_period_ms(uint32_t period)
 {
 	uint32_t count, prescale, reload, exponent;
 
-	/* Set the count to represent ticks of the 32kHz LSI clock */
-	count = (period << 5);
+	/* Set the count to represent ticks of the LSI clock */
+	count = period * (LSI_FREQUENCY/1000);
 
 	/* Strip off the first 12 bits to get the prescale value required */
 	prescale = (count >> 12);
