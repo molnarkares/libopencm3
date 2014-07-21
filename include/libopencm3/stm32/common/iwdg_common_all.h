@@ -33,7 +33,7 @@ specific memorymap.h header before including this header file.*/
 #define LIBOPENCM3_IWDG_COMMON_ALL_H
 
 /**@{*/
-
+#define LSI_FREQUENCY 32000
 /* --- IWDG registers ------------------------------------------------------ */
 
 /* Key Register (IWDG_KR) */
