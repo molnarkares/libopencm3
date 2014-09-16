@@ -168,7 +168,7 @@ only @ref afio_remap_cld are also available.
 */
 void gpio_primary_remap(uint32_t swjdisable, uint32_t maps)
 {
-	AFIO_MAPR |= (swjdisable & AFIO_MAPR_SWJ_MASK) | (maps & 0x1FFFFF);
+	AFIO_MAPR = (swjdisable & AFIO_MAPR_SWJ_MASK) | (maps & 0x1FFFFF);
 }
 
 /*---------------------------------------------------------------------------*/
