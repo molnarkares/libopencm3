@@ -253,6 +253,7 @@ void _usbd_control_out(usbd_device *usbd_dev, uint8_t ea)
 		break;
 	default:
 		stall_transaction(usbd_dev);
+		break;
 	}
 }
 
@@ -283,6 +284,7 @@ void _usbd_control_in(usbd_device *usbd_dev, uint8_t ea)
 		break;
 	default:
 		stall_transaction(usbd_dev);
+		break;
 	}
 }
 

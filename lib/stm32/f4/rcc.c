@@ -264,6 +264,7 @@ int rcc_osc_ready_int_flag(enum rcc_osc osc)
 	}
 
 	cm3_assert_not_reached();
+	return (0);
 }
 
 void rcc_css_int_clear(void)

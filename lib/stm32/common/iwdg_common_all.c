@@ -38,7 +38,9 @@ relevant bit is not set, the IWDG timer must be enabled by software.
 
 #include <libopencm3/stm32/iwdg.h>
 
-#define LSI_FREQUENCY 32000
+static bool iwdg_reload_busy(void);
+static bool iwdg_prescaler_busy(void);
+
 #define COUNT_LENGTH 12
 #define COUNT_MASK ((1 << COUNT_LENGTH)-1)
 
@@ -74,11 +76,11 @@ void iwdg_set_period_ms(uint32_t period)
 {
 	uint32_t count, prescale, reload, exponent;
 
-	/* Set the count to represent ticks of the 32kHz LSI clock */
-	count = (period << 5);
+	/* Set the count to represent ticks of the LSI clock */
+	count = period * (LSI_FREQUENCY/1000);
 
 	/* Strip off the first 12 bits to get the prescale value required */
-	prescale = (count >> 12);
+	prescale = (count >> COUNT_LENGTH);
 	if (prescale > 256) {
 		exponent = IWDG_PR_DIV256; reload = COUNT_MASK;
 	} else if (prescale > 128) {
@@ -98,8 +100,8 @@ void iwdg_set_period_ms(uint32_t period)
 	}
 
 	/* Avoid the undefined situation of a zero count */
-	if (count == 0) {
-		count = 1;
+	if (reload == 0) {
+	    reload = 1;
 	}
 
 	while (iwdg_prescaler_busy());
@@ -117,7 +119,7 @@ void iwdg_set_period_ms(uint32_t period)
 loading a new count value.
 */
 
-bool iwdg_reload_busy(void)
+static bool iwdg_reload_busy(void)
 {
 	return IWDG_SR & IWDG_SR_RVU;
 }
@@ -129,7 +131,7 @@ bool iwdg_reload_busy(void)
 loading a new period value.
 */
 
-bool iwdg_prescaler_busy(void)
+static bool iwdg_prescaler_busy(void)
 {
 	return IWDG_SR & IWDG_SR_PVU;
 }

@@ -488,6 +488,7 @@ void rcc_sysclk_config(enum osc_src src, enum xtal_t xtal, uint8_t pll_div400)
 			 * bad osc_src parameter.
 			 */
 			lm4f_rcc_sysclk_freq = 0;
+			break;
 		}
 	}
 

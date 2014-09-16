@@ -51,6 +51,7 @@ void timer_ic_set_polarity(uint32_t timer_peripheral, enum tim_ic_id ic,
 		break;
 	case TIM_IC_FALLING: /* 01 */
 		TIM_CCER(timer_peripheral) |= (0x2 << (ic * 4));
+		break;
 	}
 }
 /**@}*/

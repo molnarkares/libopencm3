@@ -35,6 +35,11 @@
 
 #include <libopencm3/stm32/common/iwdg_common_all.h>
 
+#ifdef LSI_FREQUENCY
+#undef LSI_FREQUENCY
+#define LSI_FREQUENCY 40000
+#endif
+
 /* --- IWDG registers ------------------------------------------------------ */
 
 /* Window register (IWDG_WINR) */

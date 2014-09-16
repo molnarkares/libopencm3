@@ -111,6 +111,10 @@ int can_init(uint32_t canport, bool ttcm, bool abom, bool awum, bool nart,
 	/* Exit from sleep mode. */
 	CAN_MCR(canport) &= ~CAN_MCR_SLEEP;
 
+    /* Exit from Debug freeze. */
+    CAN_MCR(canport) &= ~CAN_MCR_DBF;
+
+
 	/* Request initialization "enter". */
 	CAN_MCR(canport) |= CAN_MCR_INRQ;
 
